@@ -1,20 +1,21 @@
 package nl.sogyo.mancala.domain;
 
-
-
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import nl.sogyo.mancala.Player;
+import nl.sogyo.mancala.bowl.Bowl;
 
 public class PlayerTest {
 	
-	private static Player player;
+	private Player player;
 	
-	@BeforeAll
-	public static void setUpPlayerPair() {
+	@BeforeEach
+	public void setUpPlayerPair() {
 		player = Player.createPlayer();
 	}
 	
@@ -42,5 +43,17 @@ public class PlayerTest {
 		
 		assertNotEquals(player.isTurn(), turn, "Turn of player was not changed");
 		assertNotEquals(player.getOpponent().isTurn(), turnOpponent, "Turn of player's opponent was not changed");
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = {0, 1, 4})
+	public void gameEndsOnlyWhenCurrentPlayerHasNoTurn(int initialBeads) {
+		Bowl bowl = Bowl.createBowls(player, initialBeads);
+		
+		boolean playersTurnAndCannotPlay = player.isTurn() && !bowl.playerHasTurn(player);
+		boolean opponentsTurnAndCannotPlay = player.getOpponent().isTurn() && !bowl.playerHasTurn(player.getOpponent());
+		boolean noOneHasATurn = !bowl.playerHasTurn(player) && !bowl.playerHasTurn(player.getOpponent());
+		
+		assertEquals(player.gameHasEnded(), playersTurnAndCannotPlay || opponentsTurnAndCannotPlay || noOneHasATurn);
 	}
 }

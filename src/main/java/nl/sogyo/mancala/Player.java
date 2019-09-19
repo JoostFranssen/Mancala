@@ -31,4 +31,13 @@ public class Player {
 	public boolean isTurn() {
 		return turn;
 	}
+	
+	public void endGame() {
+		turn = false;
+		opponent.turn = false;
+	}
+	
+	public boolean gameHasEnded() {
+		return !turn && !opponent.turn;
+	}
 }
