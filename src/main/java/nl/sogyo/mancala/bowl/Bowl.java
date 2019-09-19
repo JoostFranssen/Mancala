@@ -5,7 +5,7 @@ import nl.sogyo.mancala.Player;
 public abstract class Bowl {
 	private final Player owner;
 	private int beads;
-	private Bowl neighbor;
+	protected Bowl neighbor;
 	
 	protected Bowl(Player owner) {
 		this(owner, 0, null);
@@ -31,7 +31,12 @@ public abstract class Bowl {
 		return neighbor;
 	}
 	
+	public abstract Bowl getOpposite();
+	
 	public static Bowl createBowls(Player owner, int initialBeads, int housesPerSide) {
-		return new House(owner, initialBeads);
+		Bowl initialHouse = new House(owner, initialBeads);
+		initialHouse.createNeighbor(owner, initialBeads, housesPerSide, housesPerSide - 1, 2, initialHouse);
+		return initialHouse;
 	}
+	protected abstract void createNeighbor(Player owner, int initialBeads, int housesPerSide, int housesLeft, int kalahasLeft, Bowl initialHouse);
 }
