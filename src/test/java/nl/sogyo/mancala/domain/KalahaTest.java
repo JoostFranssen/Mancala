@@ -20,7 +20,7 @@ class KalahaTest {
 		setUp(4);
 	}
 	public void setUp(int initialBeads) {
-		player = Player.createPlayer();
+		player = new Player();
 		house = (House)Bowl.createBowls(player, initialBeads);
 	}
 	

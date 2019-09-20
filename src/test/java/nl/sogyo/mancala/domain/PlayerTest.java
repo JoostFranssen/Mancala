@@ -16,7 +16,7 @@ public class PlayerTest {
 	
 	@BeforeEach
 	public void setUpPlayerPair() {
-		player = Player.createPlayer();
+		player = new Player();
 	}
 	
 	@Test

@@ -4,19 +4,14 @@ public class Player {
 	private Player opponent;
 	private boolean turn;
 	
-	private Player() {}
-	
-	public static Player createPlayer() {
-		Player player1 = new Player();
-		Player player2 = new Player();
-		
-		player1.opponent = player2;
-		player2.opponent = player1;
-		
-		player1.turn = true;
-		player2.turn = false;
-		
-		return player1;
+	public Player() {
+		turn = true;
+		opponent = new Player(this);
+	}
+	public Player(Player opponent) {
+		this.opponent = opponent;
+		turn = !opponent.isTurn();
+		opponent.opponent = this;
 	}
 	
 	public void switchTurn() {

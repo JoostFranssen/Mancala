@@ -30,7 +30,7 @@ class HouseTest {
 		setUpBoard(initialBeads, DEFAULT_HOUSES_PER_SIDE);
 	}
 	public void setUpBoard(int initialBeads, int housesPerSide) {
-		player = Player.createPlayer();
+		player = new Player();
 		house = (House)Bowl.createBowls(player, initialBeads, housesPerSide);
 	}
 	
