@@ -52,7 +52,7 @@ class KalahaTest {
 	@Test
 	public void ownKalahaIsReachedButOpponentKalahaIsSkipped() {
 		setUpBoard(4, 2);
-		house.startDistribute(player); //start from last house, places one bead in Kalaha, 1 in both opponent's houses, and the last bead in the first own house
+		house.play(player); //start from last house, places one bead in Kalaha, 1 in both opponent's houses, and the last bead in the first own house
 		
 		Kalaha playerKalaha = (Kalaha)house.getNeighbor();
 		Kalaha opponentKalaha = (Kalaha)playerKalaha.getNeighbor().getNeighbor().getNeighbor();
@@ -64,7 +64,7 @@ class KalahaTest {
 	@Test
 	public void turnDoesNotSwitchAfterEndInOwnKalaha() {
 		setUpBoard(1);
-		house.startDistribute(player); //distribution ends in own kalaha
+		house.play(player); //distribution ends in own kalaha
 		
 		assertTrue(player.isTurn(), "Player did not have another turn while finishing in their own kalaha");
 	}

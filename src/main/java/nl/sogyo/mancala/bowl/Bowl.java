@@ -7,9 +7,6 @@ public abstract class Bowl {
 	protected int beads;
 	protected Bowl neighbor;
 	
-	protected Bowl(Player owner) {
-		this(owner, 0, null);
-	}
 	protected Bowl(Player owner, int beads) {
 		this(owner, beads, null);
 	}
@@ -42,7 +39,7 @@ public abstract class Bowl {
 	protected abstract Player findPlayerWithBiggestKalaha(Kalaha currentLargest);
 	
 	protected void distribute(int beadsToDistribute, Player distributor) {
-		int newBeadsToDistribute = putBead(beadsToDistribute, distributor);
+		int newBeadsToDistribute = takeBead(beadsToDistribute, distributor);
 		if(newBeadsToDistribute > 0) {
 			neighbor.distribute(newBeadsToDistribute, distributor);
 		} else {
@@ -50,7 +47,7 @@ public abstract class Bowl {
 		}
 	}
 	
-	protected int putBead(int totalBeads, Player beadsOrigin) {
+	protected int takeBead(int totalBeads, Player beadsOriginalOwner) {
 		beads++;
 		return totalBeads - 1;
 	}

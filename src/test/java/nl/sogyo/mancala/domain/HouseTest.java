@@ -90,20 +90,20 @@ class HouseTest {
 		Player distributor = player.getOpponent();
 		
 		if(house.getOwner() != distributor) {
-			assertThrows(IllegalArgumentException.class, () -> house.startDistribute(distributor), "Opponent played the other's house, but no exception was thrown");
+			assertThrows(IllegalArgumentException.class, () -> house.play(distributor), "Opponent played the other's house, but no exception was thrown");
 		}
 	}
 	
 	@Test
 	public void startDistributeHouseGetsEmptied() {
-		house.startDistribute(player);
+		house.play(player);
 		
 		assertEquals(house.getBeads(), 0, "House were distribution started was not emptied");
 	}
 	
 	@Test
 	public void distributeFirstHouseWithFourBeadsDistributesOneOverNexthouses() {
-		firstHouse.startDistribute(player);
+		firstHouse.play(player);
 		House currentHouse = firstHouse;
 		for(int i = 1; i <= 4; i++) {
 			currentHouse = (House)currentHouse.getNeighbor();
@@ -115,7 +115,7 @@ class HouseTest {
 	public void distributorHasTurn() {
 		House opposite = (House)house.getOpposite();
 		if(!player.getOpponent().isTurn()) {
-			assertThrows(IllegalStateException.class, () -> opposite.startDistribute(player.getOpponent()), "The player plays while not having a turn");
+			assertThrows(IllegalStateException.class, () -> opposite.play(player.getOpponent()), "The player plays while not having a turn");
 		} else {
 			fail("Opponent should not have a turn");
 		}
@@ -124,8 +124,8 @@ class HouseTest {
 	@Test
 	public void distributionEndsInOwnEmptyHouseStealsFromOpposite() {
 		setUpBoard(1, 2);
-		house.startDistribute(player); //ends in Kalaha
-		firstHouse.startDistribute(player); //ends in house, which was just emptied
+		house.play(player); //ends in Kalaha
+		firstHouse.play(player); //ends in house, which was just emptied
 		
 		//steal from the house were we ended in
 		assertEquals(house.getBeads(), 0, "The second house was not stolen from");
@@ -145,7 +145,7 @@ class HouseTest {
 		setUpBoard(1, 1);
 		
 		//empty the first six houses
-		house.startDistribute(player);
+		house.play(player);
 		
 		assertFalse(house.playerHasTurn(player), "All houses of the player are empty, but they still had a turn");
 		assertTrue(house.playerHasTurn(player.getOpponent()), "Opponent player has at least one non-empty house, but they had no turn");
@@ -153,7 +153,7 @@ class HouseTest {
 	
 	@Test
 	public void playerTurnSwitchesAfterDistributionNotInKalaha() {
-		house.startDistribute(player);
+		house.play(player);
 		
 		assertFalse(player.isTurn(), "After distribution that did not end in a Kalaha it was still the players turn");
 	}
@@ -174,7 +174,7 @@ class HouseTest {
 	public void playerWinsEndInHouse() {
 		setUpBoard(3, 1);
 		
-		house.startDistribute(player);
+		house.play(player);
 		
 		assertEquals(house.getWinner(), player, "Game ended with player in a winning state, but player did not win");
 	}
@@ -183,7 +183,7 @@ class HouseTest {
 	public void playerWinsEndInKahala() {
 		setUpBoard(1, 1);
 		
-		house.startDistribute(player);
+		house.play(player);
 		
 		assertEquals(house.getWinner(), player, "Game ended with player in a winning state, but player did not win");
 	}

@@ -9,8 +9,8 @@ public class Kalaha extends Bowl {
 		super(owner, 0, neighbor);
 		boolean foundKalaha = false;
 		Bowl currentBowl = this;
-		while(currentBowl.getNeighbor() != null) {
-			currentBowl = currentBowl.getNeighbor();
+		while(currentBowl.neighbor != null) {
+			currentBowl = currentBowl.neighbor;
 			foundKalaha |= (currentBowl instanceof Kalaha);
 		}
 		if(foundKalaha) {
@@ -24,12 +24,11 @@ public class Kalaha extends Bowl {
 	protected Player findPlayerWithBiggestKalaha(Kalaha currentLargest) {
 		if(currentLargest == null) {
 			return neighbor.findPlayerWithBiggestKalaha(this);
+		}
+		if(currentLargest.beads == beads) {
+			return null; //it is a draw, so there is no winner
 		} else {
-			if(currentLargest.getBeads() == beads) {
-				return null;
-			} else {
-				return currentLargest.getBeads() > beads ? currentLargest.owner : this.owner;
-			}
+			return (currentLargest.getBeads() > beads ? currentLargest : this).owner;
 		}
 	}
 	
@@ -58,9 +57,9 @@ public class Kalaha extends Bowl {
 	}
 	
 	@Override
-	protected int putBead(int totalBeads, Player beadsOrigin) {
-		if(owner == beadsOrigin) {
-			return super.putBead(totalBeads, beadsOrigin);
+	protected int takeBead(int totalBeads, Player beadsOriginalOwner) {
+		if(owner == beadsOriginalOwner) {
+			return super.takeBead(totalBeads, beadsOriginalOwner);
 		} else {
 			return totalBeads;
 		}
