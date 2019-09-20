@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import nl.sogyo.mancala.Player;
 import nl.sogyo.mancala.bowl.Bowl;
+import nl.sogyo.mancala.bowl.House;
 
 public class PlayerTest {
 	
@@ -48,7 +49,7 @@ public class PlayerTest {
 	@ParameterizedTest
 	@ValueSource(ints = {0, 1, 4})
 	public void gameEndsOnlyWhenCurrentPlayerHasNoTurn(int initialBeads) {
-		Bowl bowl = Bowl.createBowls(player, initialBeads);
+		Bowl bowl = new House(player, initialBeads, House.DEFAULT_HOUSES_PER_SIDE);
 		
 		boolean playersTurnAndCannotPlay = player.isTurn() && !bowl.playerHasTurn(player);
 		boolean opponentsTurnAndCannotPlay = player.getOpponent().isTurn() && !bowl.playerHasTurn(player.getOpponent());

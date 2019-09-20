@@ -4,15 +4,20 @@ import nl.sogyo.mancala.Player;
 
 public class Kalaha extends Bowl {
 	public static final int NUMBER_OF_KALAHAS = 2;
-
-	protected Kalaha(Player owner) {
-		super(owner);
-	}
-	protected Kalaha(Player owner, int beads) {
-		super(owner, beads);
-	}
-	public Kalaha(Player owner, int beads, Bowl neighbor) {
-		super(owner, beads, neighbor);
+	
+	protected Kalaha(Player owner, int beads, Bowl neighbor, int housesPerSide) {
+		super(owner, 0, neighbor);
+		boolean foundKalaha = false;
+		Bowl currentBowl = this;
+		while(currentBowl.getNeighbor() != null) {
+			currentBowl = currentBowl.getNeighbor();
+			foundKalaha |= (currentBowl instanceof Kalaha);
+		}
+		if(foundKalaha) {
+			currentBowl.neighbor = this;
+		} else {
+			new House(owner, beads, this, housesPerSide);
+		}
 	}
 	
 	@Override
@@ -64,15 +69,5 @@ public class Kalaha extends Bowl {
 	@Override
 	public Bowl getOpposite() {
 		return this;
-	}
-	
-	@Override
-	protected void createNeighbor(Player owner, int initialBeads, int housesPerSide, int housesLeft, int kalahasLeft, Bowl initialHouse) {
-		if(kalahasLeft > 0) {
-			neighbor = new House(owner.getOpponent(), initialBeads);
-			neighbor.createNeighbor(owner.getOpponent(), initialBeads, housesPerSide, housesPerSide - 1, kalahasLeft, initialHouse);
-		} else {
-			neighbor = initialHouse;
-		}
 	}
 }

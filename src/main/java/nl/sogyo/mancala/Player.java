@@ -10,7 +10,7 @@ public class Player {
 	}
 	public Player(Player opponent) {
 		this.opponent = opponent;
-		turn = !opponent.isTurn();
+		turn = !opponent.turn;
 		opponent.opponent = this;
 	}
 	

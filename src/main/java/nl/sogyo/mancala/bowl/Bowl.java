@@ -67,18 +67,4 @@ public abstract class Bowl {
 	protected abstract void endOfTurn(Player distributor);
 	
 	public abstract Bowl getOpposite();
-	
-	public static Bowl createBowls(Player owner, int initialBeads) {
-		return createBowls(owner, initialBeads, 6);
-	}
-	public static Bowl createBowls(Player owner, int initialBeads, int housesPerSide) {
-		if(initialBeads == 0) {
-			owner.endGame();
-		}
-		
-		Bowl initialHouse = new House(owner, initialBeads);
-		initialHouse.createNeighbor(owner, initialBeads, housesPerSide, housesPerSide - 1, Kalaha.NUMBER_OF_KALAHAS, initialHouse);
-		return initialHouse;
-	}
-	protected abstract void createNeighbor(Player owner, int initialBeads, int housesPerSide, int housesLeft, int kalahasLeft, Bowl initialHouse);
 }

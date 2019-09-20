@@ -15,23 +15,22 @@ import nl.sogyo.mancala.bowl.House;
 import nl.sogyo.mancala.bowl.Kalaha;
 
 class HouseTest {
-	
-	private static final int DEFAULT_HOUSES_PER_SIDE = 6;
-	private static final int DEFAULT_NUMBER_OF_BOWLS = 2 * DEFAULT_HOUSES_PER_SIDE + Kalaha.NUMBER_OF_KALAHAS;
+	;
+	public static final int DEFAULT_NUMBER_OF_BOWLS = 2 * House.DEFAULT_HOUSES_PER_SIDE + Kalaha.NUMBER_OF_KALAHAS;
 	
 	private Player player;
 	private House house;
 	
 	@BeforeEach
 	public void setUpBoard() {
-		setUpBoard(4, DEFAULT_HOUSES_PER_SIDE);
+		setUpBoard(4, House.DEFAULT_HOUSES_PER_SIDE);
 	}
 	public void setUpBoard(int initialBeads) {
-		setUpBoard(initialBeads, DEFAULT_HOUSES_PER_SIDE);
+		setUpBoard(initialBeads, House.DEFAULT_HOUSES_PER_SIDE);
 	}
 	public void setUpBoard(int initialBeads, int housesPerSide) {
 		player = new Player();
-		house = (House)Bowl.createBowls(player, initialBeads, housesPerSide);
+		house = (House)((new House(player.getOpponent(), initialBeads, housesPerSide)).getNeighbor().getNeighbor());
 	}
 	
 	@Test
@@ -69,8 +68,8 @@ class HouseTest {
 			currentBowl = currentBowl.getNeighbor();
 		} while(currentBowl != house);
 		
-		assertEquals(ownHouses, DEFAULT_HOUSES_PER_SIDE, "The player does not have " + DEFAULT_HOUSES_PER_SIDE + " houses");
-		assertEquals(opponentHouses, DEFAULT_HOUSES_PER_SIDE, "The opponent does not have " + DEFAULT_HOUSES_PER_SIDE + " houses");
+		assertEquals(ownHouses, House.DEFAULT_HOUSES_PER_SIDE, "The player does not have " + House.DEFAULT_HOUSES_PER_SIDE + " houses");
+		assertEquals(opponentHouses, House.DEFAULT_HOUSES_PER_SIDE, "The opponent does not have " + House.DEFAULT_HOUSES_PER_SIDE + " houses");
 	}
 	
 	@Test
@@ -129,7 +128,7 @@ class HouseTest {
 		
 		//empty the first six houses
 		Bowl currentHouse = house;
-		for(int i = 0; i < DEFAULT_HOUSES_PER_SIDE; i++) {
+		for(int i = 0; i < House.DEFAULT_HOUSES_PER_SIDE; i++) {
 			((House)currentHouse).startDistribute(player);
 			currentHouse = currentHouse.getNeighbor();
 		}

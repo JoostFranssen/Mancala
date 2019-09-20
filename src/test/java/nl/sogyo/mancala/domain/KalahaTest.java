@@ -21,7 +21,7 @@ class KalahaTest {
 	}
 	public void setUp(int initialBeads) {
 		player = new Player();
-		house = (House)Bowl.createBowls(player, initialBeads);
+		house = (House)((new House(player.getOpponent(), initialBeads, House.DEFAULT_HOUSES_PER_SIDE)).getNeighbor().getNeighbor());
 	}
 	
 	@Test
