@@ -36,7 +36,6 @@ public abstract class Bowl {
 		if(!owner.gameHasEnded()) {
 			throw new IllegalStateException("There is no winner yet as the game has not ended");
 		}
-		
 		return findPlayerWithBiggestKalaha(null);
 	}
 	

@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import nl.sogyo.mancala.Player;
 import nl.sogyo.mancala.bowl.Bowl;
@@ -19,18 +22,25 @@ class HouseTest {
 	public static final int DEFAULT_NUMBER_OF_BOWLS = 2 * House.DEFAULT_HOUSES_PER_SIDE + Kalaha.NUMBER_OF_KALAHAS;
 	
 	private Player player;
-	private House house;
+	private House house, firstHouse;
 	
 	@BeforeEach
 	public void setUpBoard() {
-		setUpBoard(4, House.DEFAULT_HOUSES_PER_SIDE);
+		setUpBoard(House.DEFAULT_INITIAL_BEADS, House.DEFAULT_HOUSES_PER_SIDE);
 	}
 	public void setUpBoard(int initialBeads) {
 		setUpBoard(initialBeads, House.DEFAULT_HOUSES_PER_SIDE);
 	}
 	public void setUpBoard(int initialBeads, int housesPerSide) {
 		player = new Player();
-		house = (House)((new House(player.getOpponent(), initialBeads, housesPerSide)).getNeighbor().getNeighbor());
+		house = new House(player, initialBeads, housesPerSide);
+		
+		//find the first house owned by player
+		Bowl currentBowl = house.getNeighbor();
+		while(!(currentBowl instanceof House) || currentBowl.getOwner() != player) {
+			currentBowl = currentBowl.getNeighbor();
+		}
+		firstHouse = (House)currentBowl;
 	}
 	
 	@Test
@@ -53,8 +63,11 @@ class HouseTest {
 		assertEquals(house.getOpposite().getOwner(), house.getOwner().getOpponent(), "The opposite of a house does not belong to the opponent");
 	}
 	
-	@Test
-	public void everyPlayerHasTheRightNumberOfHouses() {
+	@ParameterizedTest
+	@ValueSource(ints = {1, 2, 3, 6})
+	public void everyPlayerHasTheRightNumberOfHouses(int housesPerSide) {
+		setUpBoard(House.DEFAULT_INITIAL_BEADS, housesPerSide);
+		
 		Bowl currentBowl = house;
 		int ownHouses = 0;
 		int opponentHouses = 0;
@@ -68,8 +81,8 @@ class HouseTest {
 			currentBowl = currentBowl.getNeighbor();
 		} while(currentBowl != house);
 		
-		assertEquals(ownHouses, House.DEFAULT_HOUSES_PER_SIDE, "The player does not have " + House.DEFAULT_HOUSES_PER_SIDE + " houses");
-		assertEquals(opponentHouses, House.DEFAULT_HOUSES_PER_SIDE, "The opponent does not have " + House.DEFAULT_HOUSES_PER_SIDE + " houses");
+		assertEquals(ownHouses, housesPerSide, "The player does not have " + housesPerSide + " houses");
+		assertEquals(opponentHouses, housesPerSide, "The opponent does not have " + housesPerSide + " houses");
 	}
 	
 	@Test
@@ -82,7 +95,7 @@ class HouseTest {
 	}
 	
 	@Test
-	public void distributeFirstHouseWithFourBeadsGetsEmptied() {
+	public void startDistributeHouseGetsEmptied() {
 		house.startDistribute(player);
 		
 		assertEquals(house.getBeads(), 0, "House were distribution started was not emptied");
@@ -90,8 +103,8 @@ class HouseTest {
 	
 	@Test
 	public void distributeFirstHouseWithFourBeadsDistributesOneOverNexthouses() {
-		house.startDistribute(player);
-		House currentHouse = house;
+		firstHouse.startDistribute(player);
+		House currentHouse = firstHouse;
 		for(int i = 1; i <= 4; i++) {
 			currentHouse = (House)currentHouse.getNeighbor();
 			assertEquals(currentHouse.getBeads(), 5, "Neightbor #" + i + " does not have five beads");
@@ -99,21 +112,26 @@ class HouseTest {
 	}
 	
 	@Test
+	public void distributorHasTurn() {
+		House opposite = (House)house.getOpposite();
+		if(!player.getOpponent().isTurn()) {
+			assertThrows(IllegalStateException.class, () -> opposite.startDistribute(player.getOpponent()), "The player plays while not having a turn");
+		} else {
+			fail("Opponent should not have a turn");
+		}
+	}
+	
+	@Test
 	public void distributionEndsInOwnEmptyHouseStealsFromOpposite() {
-		setUpBoard(1);
-		
-		//empty the second house by distributing its one bead
-		House secondHouse = (House)house.getNeighbor();
-		secondHouse.startDistribute(player);
-		
-		//start distributing from the first house, which shall end in the now empty second house
-		house.startDistribute(player);
+		setUpBoard(1, 2);
+		house.startDistribute(player); //ends in Kalaha
+		firstHouse.startDistribute(player); //ends in house, which was just emptied
 		
 		//steal from the house were we ended in
-		assertEquals(secondHouse.getBeads(), 0, "The second house was not stolen from");
+		assertEquals(house.getBeads(), 0, "The second house was not stolen from");
 		
 		//steal from the opposite house
-		assertEquals(secondHouse.getOpposite().getBeads(), 0, "The opposite of the second house was not stolen from");
+		assertEquals(house.getOpposite().getBeads(), 0, "The opposite of the second house was not stolen from");
 	}
 	
 	@Test
@@ -124,14 +142,10 @@ class HouseTest {
 	
 	@Test
 	public void onlyPlayerWithEmptyHousesHasNoTurn() {
-		setUpBoard(1);
+		setUpBoard(1, 1);
 		
 		//empty the first six houses
-		Bowl currentHouse = house;
-		for(int i = 0; i < House.DEFAULT_HOUSES_PER_SIDE; i++) {
-			((House)currentHouse).startDistribute(player);
-			currentHouse = currentHouse.getNeighbor();
-		}
+		house.startDistribute(player);
 		
 		assertFalse(house.playerHasTurn(player), "All houses of the player are empty, but they still had a turn");
 		assertTrue(house.playerHasTurn(player.getOpponent()), "Opponent player has at least one non-empty house, but they had no turn");
@@ -158,12 +172,11 @@ class HouseTest {
 	
 	@Test
 	public void playerWinsEndInHouse() {
-		setUpBoard(2, 1);
+		setUpBoard(3, 1);
 		
 		house.startDistribute(player);
-		((House)house.getNeighbor().getNeighbor()).startDistribute(player.getOpponent());
 		
-		assertEquals(house.getWinner(), player.getOpponent(), "Game ended with opponent in a winning state, but opponent did not win");
+		assertEquals(house.getWinner(), player, "Game ended with player in a winning state, but player did not win");
 	}
 	
 	@Test

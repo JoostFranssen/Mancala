@@ -51,9 +51,12 @@ public class House extends Bowl {
 		}
 	}
 	
-	public void startDistribute(Player distributor) throws IllegalArgumentException {
+	public void startDistribute(Player distributor) throws IllegalArgumentException, IllegalStateException {
 		if(distributor != owner) {
-			throw new IllegalArgumentException("The distributor does not own the house to play");
+			throw new IllegalArgumentException("The player does not own the house to play");
+		}
+		if(!distributor.isTurn()) {
+			throw new IllegalStateException("It is not the player's turn");
 		}
 		
 		int startingBeads = beads; //we cannot empty this bowl after the distribution in case the distribution makes a full circle

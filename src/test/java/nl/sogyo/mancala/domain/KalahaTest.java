@@ -16,12 +16,15 @@ class KalahaTest {
 	private House house;
 	
 	@BeforeEach
-	public void setUp() {
-		setUp(4);
+	public void setUpBoard() {
+		setUpBoard(House.DEFAULT_INITIAL_BEADS, House.DEFAULT_HOUSES_PER_SIDE);
 	}
-	public void setUp(int initialBeads) {
+	public void setUpBoard(int initialBeads) {
+		setUpBoard(initialBeads, House.DEFAULT_HOUSES_PER_SIDE);
+	}
+	public void setUpBoard(int initialBeads, int housesPerSide) {
 		player = new Player();
-		house = (House)((new House(player.getOpponent(), initialBeads, House.DEFAULT_HOUSES_PER_SIDE)).getNeighbor().getNeighbor());
+		house = new House(player, initialBeads, housesPerSide);
 	}
 	
 	@Test
@@ -47,8 +50,20 @@ class KalahaTest {
 	}
 	
 	@Test
+	public void ownKalahaIsReachedButOpponentKalahaIsSkipped() {
+		setUpBoard(4, 2);
+		house.startDistribute(player); //start from last house, places one bead in Kalaha, 1 in both opponent's houses, and the last bead in the first own house
+		
+		Kalaha playerKalaha = (Kalaha)house.getNeighbor();
+		Kalaha opponentKalaha = (Kalaha)playerKalaha.getNeighbor().getNeighbor().getNeighbor();
+		
+		assertEquals(playerKalaha.getBeads(), 1, "No bead was placed in own Kalaha");
+		assertEquals(opponentKalaha.getBeads(), 0, "A bead was placed in opponent's Kalaha");
+	}
+	
+	@Test
 	public void turnDoesNotSwitchAfterEndInOwnKalaha() {
-		setUp(6); //6 beads in each house
+		setUpBoard(1);
 		house.startDistribute(player); //distribution ends in own kalaha
 		
 		assertTrue(player.isTurn(), "Player did not have another turn while finishing in their own kalaha");
