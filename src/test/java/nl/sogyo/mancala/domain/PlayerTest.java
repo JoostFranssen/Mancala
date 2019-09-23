@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import nl.sogyo.mancala.Player;
-import nl.sogyo.mancala.bowl.Bowl;
 import nl.sogyo.mancala.bowl.House;
 
 public class PlayerTest {
