@@ -32,18 +32,18 @@ public class PlayerTest {
 	
 	@Test
 	public void exactlyOnePlayerHasTurn() {
-		assertNotEquals(player.isTurn(), player.getOpponent().isTurn(), "Players do not have mutually exclusive turn state");
+		assertNotEquals(player.hasTurn(), player.getOpponent().hasTurn(), "Players do not have mutually exclusive turn state");
 	}
 	
 	@Test
 	public void switchPlayerTurn() {
-		boolean turn = player.isTurn();
-		boolean turnOpponent = player.getOpponent().isTurn();
+		boolean turn = player.hasTurn();
+		boolean turnOpponent = player.getOpponent().hasTurn();
 		
 		player.switchTurn();
 		
-		assertNotEquals(player.isTurn(), turn, "Turn of player was not changed");
-		assertNotEquals(player.getOpponent().isTurn(), turnOpponent, "Turn of player's opponent was not changed");
+		assertNotEquals(player.hasTurn(), turn, "Turn of player was not changed");
+		assertNotEquals(player.getOpponent().hasTurn(), turnOpponent, "Turn of player's opponent was not changed");
 	}
 	
 	@ParameterizedTest
@@ -51,8 +51,8 @@ public class PlayerTest {
 	public void gameEndsOnlyWhenCurrentPlayerHasNoTurn(int initialBeads) {
 		Bowl bowl = new House(player, initialBeads, House.DEFAULT_HOUSES_PER_SIDE);
 		
-		boolean playersTurnAndCannotPlay = player.isTurn() && !bowl.playerHasTurn(player);
-		boolean opponentsTurnAndCannotPlay = player.getOpponent().isTurn() && !bowl.playerHasTurn(player.getOpponent());
+		boolean playersTurnAndCannotPlay = player.hasTurn() && !bowl.playerHasTurn(player);
+		boolean opponentsTurnAndCannotPlay = player.getOpponent().hasTurn() && !bowl.playerHasTurn(player.getOpponent());
 		boolean noOneHasATurn = !bowl.playerHasTurn(player) && !bowl.playerHasTurn(player.getOpponent());
 		
 		assertEquals(player.gameHasEnded(), playersTurnAndCannotPlay || opponentsTurnAndCannotPlay || noOneHasATurn);

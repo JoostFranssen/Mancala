@@ -66,6 +66,6 @@ class KalahaTest {
 		setUpBoard(1);
 		house.play(player); //distribution ends in own kalaha
 		
-		assertTrue(player.isTurn(), "Player did not have another turn while finishing in their own kalaha");
+		assertTrue(player.hasTurn(), "Player did not have another turn while finishing in their own kalaha");
 	}
 }

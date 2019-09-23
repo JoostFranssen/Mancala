@@ -114,7 +114,7 @@ class HouseTest {
 	@Test
 	public void distributorHasTurn() {
 		House opposite = (House)house.getOpposite();
-		if(!player.getOpponent().isTurn()) {
+		if(!player.getOpponent().hasTurn()) {
 			assertThrows(IllegalStateException.class, () -> opposite.play(player.getOpponent()), "The player plays while not having a turn");
 		} else {
 			fail("Opponent should not have a turn");
@@ -155,7 +155,7 @@ class HouseTest {
 	public void playerTurnSwitchesAfterDistributionNotInKalaha() {
 		house.play(player);
 		
-		assertFalse(player.isTurn(), "After distribution that did not end in a Kalaha it was still the players turn");
+		assertFalse(player.hasTurn(), "After distribution that did not end in a Kalaha it was still the players turn");
 	}
 	
 	@Test
@@ -186,5 +186,15 @@ class HouseTest {
 		house.play(player);
 		
 		assertEquals(house.getWinner(), player, "Game ended with player in a winning state, but player did not win");
+	}
+	
+	@Test
+	public void zeroethNeighborIsSelf() {
+		assertEquals(house, house.getNeighbor(0), "Zeroeth neighbor is not the house itself");
+	}
+	
+	@Test
+	public void secondNeighborIsNeighborOfNeighbor() {
+		assertEquals(house.getNeighbor().getNeighbor(), house.getNeighbor(2), "Second neighbor is not the neighbor of its neighbor");
 	}
 }

@@ -25,7 +25,15 @@ public abstract class Bowl {
 	}
 	
 	public Bowl getNeighbor() {
-		return neighbor;
+		return getNeighbor(1);
+	}
+	
+	public Bowl getNeighbor(int neighborNumber) {
+		Bowl currentBowl = this;
+		for(int i = 0; i < neighborNumber; i++) {
+			currentBowl = currentBowl.neighbor;
+		}
+		return currentBowl;
 	}
 	
 	//returns null for a draw, throws IllegalStateException when the game has not yet ended

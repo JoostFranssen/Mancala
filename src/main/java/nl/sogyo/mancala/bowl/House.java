@@ -55,7 +55,7 @@ public class House extends Bowl {
 		if(player != owner) {
 			throw new IllegalArgumentException("The player does not own the house to play");
 		}
-		if(!player.isTurn()) {
+		if(!player.hasTurn()) {
 			throw new IllegalStateException("It is not the player's turn");
 		}
 		

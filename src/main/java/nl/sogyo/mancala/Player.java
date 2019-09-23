@@ -23,7 +23,7 @@ public class Player {
 		return opponent;
 	}
 	
-	public boolean isTurn() {
+	public boolean hasTurn() {
 		return turn;
 	}
 	
