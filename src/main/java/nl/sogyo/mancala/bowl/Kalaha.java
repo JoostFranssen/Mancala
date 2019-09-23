@@ -1,6 +1,6 @@
 package nl.sogyo.mancala.bowl;
 
-import nl.sogyo.mancala.Player;
+import nl.sogyo.mancala.player.Player;
 
 public class Kalaha extends Bowl {
 	public static final int NUMBER_OF_KALAHAS = 2;

@@ -1,6 +1,6 @@
 package nl.sogyo.mancala.bowl;
 
-import nl.sogyo.mancala.Player;
+import nl.sogyo.mancala.player.Player;
 
 public abstract class Bowl {
 	protected final Player owner;

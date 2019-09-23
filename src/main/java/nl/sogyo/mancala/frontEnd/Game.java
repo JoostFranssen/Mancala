@@ -2,9 +2,9 @@ package nl.sogyo.mancala.frontEnd;
 
 import java.util.Scanner;
 
-import nl.sogyo.mancala.Player;
 import nl.sogyo.mancala.bowl.Bowl;
 import nl.sogyo.mancala.bowl.House;
+import nl.sogyo.mancala.player.Player;
 
 public class Game {
 	private Player player;
