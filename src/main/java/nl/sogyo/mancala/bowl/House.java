@@ -10,6 +10,8 @@ public class House extends Bowl {
 	/**
 	 * Creates the houses and kalahas. The number of houses is determined by DEFAULT_HOUSES_PER_SIDE and the number of beads in each house is DEFAULT_INITIAL_BEADS.
 	 * @param owner The owner of the houses on one side.
+	 * @see #House(Player, int)
+	 * @see #House(Player, int, int)
 	 */
 	public House(Player owner) {
 		this(owner, DEFAULT_INITIAL_BEADS);
@@ -18,6 +20,7 @@ public class House extends Bowl {
 	 * Creates the houses and kalahas. The number of houses is determined by DEFAULT_HOUSES_PER_SIDE.
 	 * @param owner The owner of the houses on one side.
 	 * @param beads The number of beads to be placed in each house.
+	 * @see #House(Player, int, int)
 	 */
 	public House(Player owner, int beads) {
 		this(owner, beads, DEFAULT_HOUSES_PER_SIDE);
