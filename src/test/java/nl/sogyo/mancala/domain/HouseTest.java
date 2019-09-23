@@ -48,7 +48,7 @@ class HouseTest {
 		for(int i = 0; i < DEFAULT_NUMBER_OF_BOWLS; i++) {
 			bowl = bowl.getNeighbor();
 		}
-		assertEquals(bowl, house, "Neighbor of the last bowl is not the first bowl");
+		assertEquals(house, bowl, "Neighbor of the last bowl is not the first bowl");
 	}
 	
 	@Test
@@ -59,7 +59,7 @@ class HouseTest {
 	
 	@Test
 	public void oppositeBelongsToOpponent() {
-		assertEquals(house.getOpposite().getOwner(), house.getOwner().getOpponent(), "The opposite of a house does not belong to the opponent");
+		assertEquals(house.getOwner().getOpponent(), house.getOpposite().getOwner(), "The opposite of a house does not belong to the opponent");
 	}
 	
 	@ParameterizedTest
@@ -80,8 +80,8 @@ class HouseTest {
 			currentBowl = currentBowl.getNeighbor();
 		} while(currentBowl != house);
 		
-		assertEquals(ownHouses, housesPerSide, "The player does not have " + housesPerSide + " houses");
-		assertEquals(opponentHouses, housesPerSide, "The opponent does not have " + housesPerSide + " houses");
+		assertEquals(housesPerSide, ownHouses, "The player does not have " + housesPerSide + " houses");
+		assertEquals(housesPerSide, opponentHouses, "The opponent does not have " + housesPerSide + " houses");
 	}
 	
 	@Test
@@ -96,7 +96,7 @@ class HouseTest {
 	public void startDistributeHouseGetsEmptied() {
 		house.play(player);
 		
-		assertEquals(house.getBeads(), 0, "House were distribution started was not emptied");
+		assertEquals(0, house.getBeads(), "House were distribution started was not emptied");
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ class HouseTest {
 		House currentHouse = firstHouse;
 		for(int i = 1; i <= 4; i++) {
 			currentHouse = (House)currentHouse.getNeighbor();
-			assertEquals(currentHouse.getBeads(), 5, "Neightbor #" + i + " does not have five beads");
+			assertEquals(5, currentHouse.getBeads(), "Neightbor #" + i + " does not have five beads");
 		}
 	}
 	
@@ -124,10 +124,10 @@ class HouseTest {
 		firstHouse.play(player); //ends in house, which was just emptied
 		
 		//steal from the house were we ended in
-		assertEquals(house.getBeads(), 0, "The second house was not stolen from");
+		assertEquals(0, house.getBeads(), "The second house was not stolen from");
 		
 		//steal from the opposite house
-		assertEquals(house.getOpposite().getBeads(), 0, "The opposite of the second house was not stolen from");
+		assertEquals(0, house.getOpposite().getBeads(), "The opposite of the second house was not stolen from");
 	}
 	
 	@Test
@@ -172,7 +172,7 @@ class HouseTest {
 		
 		house.play(player);
 		
-		assertEquals(house.getWinner(), player, "Game ended with player in a winning state, but player did not win");
+		assertEquals(player, house.getWinner(), "Game ended with player in a winning state, but player did not win");
 	}
 	
 	@Test
@@ -181,7 +181,7 @@ class HouseTest {
 		
 		house.play(player);
 		
-		assertEquals(house.getWinner(), player, "Game ended with player in a winning state, but player did not win");
+		assertEquals(player, house.getWinner(), "Game ended with player in a winning state, but player did not win");
 	}
 	
 	@Test
@@ -192,5 +192,14 @@ class HouseTest {
 	@Test
 	public void secondNeighborIsNeighborOfNeighbor() {
 		assertEquals(house.getNeighbor().getNeighbor(), house.getNeighbor(2), "Second neighbor is not the neighbor of its neighbor");
+	}
+	
+	@ParameterizedTest
+	@ValueSource(ints = {1, 6})
+	public void numberOfHousesByPlayer(int housesPerSide) {
+		setUpBoard(4, housesPerSide);
+		
+		assertEquals(housesPerSide, house.countHousesFromPlayer(player));
+		assertEquals(housesPerSide, house.countHousesFromPlayer(player.getOpponent()));
 	}
 }

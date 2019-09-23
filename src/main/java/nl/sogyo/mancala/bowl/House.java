@@ -7,26 +7,41 @@ public class House extends Bowl {
 	public static final int DEFAULT_HOUSES_PER_SIDE = 6;
 	public static final int DEFAULT_INITIAL_BEADS = 4;
 	
+	/**
+	 * Creates the houses and kalahas. The number of houses is determined by DEFAULT_HOUSES_PER_SIDE and the number of beads in each house is DEFAULT_INITIAL_BEADS.
+	 * @param owner The owner of the houses on one side.
+	 */
 	public House(Player owner) {
 		this(owner, DEFAULT_INITIAL_BEADS);
 	}
+	/**
+	 * Creates the houses and kalahas. The number of houses is determined by DEFAULT_HOUSES_PER_SIDE.
+	 * @param owner The owner of the houses on one side.
+	 * @param beads The number of beads to be placed in each house.
+	 */
 	public House(Player owner, int beads) {
 		this(owner, beads, DEFAULT_HOUSES_PER_SIDE);
 	}
+	/**
+	 * Creates the houses and kalahas.
+	 * @param owner The owner of the houses on one side.
+	 * @param beads The number of beads to be placed in each house.
+	 * @param housesPerSide How many houses each player should have.
+	 */
 	public House(Player owner, int beads, int housesPerSide) {
 		this(owner, beads, null, housesPerSide);
 	}
-	//creates housesPerSide houses for each player (owner and owner.getOpponent()), and one Kalaha for each player
-	//the House object created here is the house owned by owner with neighbor the owner's Kalaha
+	/**
+	 * Creates recursively the houses on one side and a kalaha; kalaha will initialize the creation of the other side of a board.
+	 * @param owner The owner of the houses on one side.
+	 * @param beads The number of beads to be placed in each house.
+	 * @param neighbor The neighboring bowl of this house.
+	 * @param housesPerSide How many houses each player should have.
+	 */
 	protected House(Player owner, int beads, Bowl neighbor, int housesPerSide) {
 		super(owner, beads, neighbor);
-		int neighboringHouses = 0;
-		Bowl currentBowl = this;
-		while(currentBowl instanceof House && neighboringHouses < housesPerSide) {
-			currentBowl = currentBowl.neighbor;
-			neighboringHouses++;
-		}
-		if(neighboringHouses < housesPerSide) {
+		int numberOfHousesFromOwner = countHousesFromPlayer(owner);
+		if(numberOfHousesFromOwner < housesPerSide) {
 			new House(owner, beads, this, housesPerSide);
 		} else {
 			new Kalaha(owner.getOpponent(), beads, this, housesPerSide);
@@ -51,6 +66,12 @@ public class House extends Bowl {
 		}
 	}
 	
+	/**
+	 * Play the current house. That is, take the beads from this and distribute them over the neighboring bowls.
+	 * @param player The player who plays.
+	 * @throws IllegalArgumentException When the player does not own the house to be played.
+	 * @throws IllegalStateException When it is not the players turn to play a house.
+	 */
 	public void play(Player player) throws IllegalArgumentException, IllegalStateException {
 		if(player != owner) {
 			throw new IllegalArgumentException("The player does not own the house to play");
@@ -80,6 +101,10 @@ public class House extends Bowl {
 		return beads == 1;
 	}
 	
+	/**
+	 * Takes the beads from this house and places them in the kalaha of the thief.
+	 * @param thief The player who steals the beads from this house.
+	 */
 	private void stealBeads(Player thief) {
 		neighbor.putBeadsInKalaha(beads, thief);
 		beads = 0;
@@ -93,5 +118,10 @@ public class House extends Bowl {
 	@Override
 	public Bowl getOpposite() {
 		return neighbor.getOpposite().getNeighbor();
+	}
+	
+	@Override
+	public boolean isHouse() {
+		return true;
 	}
 }

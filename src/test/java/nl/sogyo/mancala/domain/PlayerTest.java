@@ -42,19 +42,23 @@ public class PlayerTest {
 		
 		player.switchTurn();
 		
-		assertNotEquals(player.hasTurn(), turn, "Turn of player was not changed");
-		assertNotEquals(player.getOpponent().hasTurn(), turnOpponent, "Turn of player's opponent was not changed");
+		assertNotEquals(turn, player.hasTurn(), "Turn of player was not changed");
+		assertNotEquals(turnOpponent, player.getOpponent().hasTurn(), "Turn of player's opponent was not changed");
+	}
+	
+	@Test
+	public void gameEndsWhenPlayerHasNoTurn() {
+		House house = new House(player, 1, 1);
+		house.play(player);
+		
+		assertTrue(player.gameHasEnded(), "It was the player turn but they could not make a move, yet the game did not end");
 	}
 	
 	@ParameterizedTest
-	@ValueSource(ints = {0, 1, 4})
-	public void gameEndsOnlyWhenCurrentPlayerHasNoTurn(int initialBeads) {
-		Bowl bowl = new House(player, initialBeads, House.DEFAULT_HOUSES_PER_SIDE);
+	@ValueSource(ints = {0, House.DEFAULT_INITIAL_BEADS})
+	public void gameEndsOnlyWhenPlayersHaveATurn(int initialBeads) {
+		new House(player, initialBeads);
 		
-		boolean playersTurnAndCannotPlay = player.hasTurn() && !bowl.playerHasTurn(player);
-		boolean opponentsTurnAndCannotPlay = player.getOpponent().hasTurn() && !bowl.playerHasTurn(player.getOpponent());
-		boolean noOneHasATurn = !bowl.playerHasTurn(player) && !bowl.playerHasTurn(player.getOpponent());
-		
-		assertEquals(player.gameHasEnded(), playersTurnAndCannotPlay || opponentsTurnAndCannotPlay || noOneHasATurn);
+		assertEquals(initialBeads == 0, player.gameHasEnded(), "A new game did not have the correct state when there were " + initialBeads + "initial beads");
 	}
 }

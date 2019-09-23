@@ -28,7 +28,7 @@ class KalahaTest {
 	}
 	
 	@Test
-	public void everyPlayerHasOneKalaha() {
+	public void eachPlayerHasOneKalaha() {
 		Bowl currentBowl = house;
 		int playerKalahas = 0;
 		int opponentKalahas = 0;
@@ -45,8 +45,15 @@ class KalahaTest {
 			currentBowl = currentBowl.getNeighbor();
 		} while(currentBowl != house);
 		
-		assertEquals(playerKalahas, 1, "The player does not have exactly one kalaha");
-		assertEquals(opponentKalahas, 1, "The opponent does not have exactly one kalaha");
+		assertEquals(1, playerKalahas, "The player does not have exactly one kalaha");
+		assertEquals(1, opponentKalahas, "The opponent does not have exactly one kalaha");
+	}
+	
+	@Test
+	public void countKalahas() {
+		//these methods were later implemented and thus are tested separately from the kalaha count
+		assertEquals(1, house.countKalahasFromPlayer(player), "Player does not have one kalaha");
+		assertEquals(1, house.countKalahasFromPlayer(player.getOpponent()), "Opponent does not have one kalaha");
 	}
 	
 	@Test
@@ -57,8 +64,8 @@ class KalahaTest {
 		Kalaha playerKalaha = (Kalaha)house.getNeighbor();
 		Kalaha opponentKalaha = (Kalaha)playerKalaha.getNeighbor().getNeighbor().getNeighbor();
 		
-		assertEquals(playerKalaha.getBeads(), 1, "No bead was placed in own Kalaha");
-		assertEquals(opponentKalaha.getBeads(), 0, "A bead was placed in opponent's Kalaha");
+		assertEquals(1, playerKalaha.getBeads(), "No bead was placed in own Kalaha");
+		assertEquals(0, opponentKalaha.getBeads(), "A bead was placed in opponent's Kalaha");
 	}
 	
 	@Test
