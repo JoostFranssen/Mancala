@@ -15,13 +15,13 @@ public class Kalaha extends Bowl {
 	protected Kalaha(Player owner, int beads, Bowl neighbor, int housesPerSide) {
 		super(owner, 0, neighbor);
 		int numberOfKalahasFromOwner = countKalahasFromPlayer(owner.getOpponent());
-		if(numberOfKalahasFromOwner > 0) {
+		if(numberOfKalahasFromOwner > 0) { //there are enough kalahas, so we can connect the last house to this kalaha
 			Bowl currentBowl = this;
 			while(currentBowl.neighbor != null) {
 				currentBowl = currentBowl.neighbor;
 			}
 			currentBowl.neighbor = this;
-		} else {
+		} else { //we still need another kalaha and therefore also another row of houses
 			new House(owner, beads, this, housesPerSide);
 		}
 	}
@@ -34,7 +34,7 @@ public class Kalaha extends Bowl {
 		if(currentLargest.beads == beads) {
 			return null; //it is a draw, so there is no winner
 		} else {
-			return (currentLargest.getBeads() > beads ? currentLargest : this).owner;
+			return (currentLargest.beads > beads ? currentLargest : this).owner;
 		}
 	}
 	
@@ -57,14 +57,14 @@ public class Kalaha extends Bowl {
 	
 	@Override
 	protected void endOfTurn(Player distributor) {
-		if(!playerHasTurn(distributor)) {
+		if(!playerHasTurn(distributor)) { //player ends in their own kalaha, so they have another turn and we need only check whether they can play
 			distributor.endGame();
 		}
 	}
 	
 	@Override
 	protected int takeBead(int totalBeads, Player beadsOriginalOwner) {
-		if(owner == beadsOriginalOwner) {
+		if(owner == beadsOriginalOwner) { //only take a bead when the kalaha belongs to the player who is distributing the beads
 			return super.takeBead(totalBeads, beadsOriginalOwner);
 		} else {
 			return totalBeads;

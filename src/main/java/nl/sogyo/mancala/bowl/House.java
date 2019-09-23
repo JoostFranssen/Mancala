@@ -35,7 +35,7 @@ public class House extends Bowl {
 		this(owner, beads, null, housesPerSide);
 	}
 	/**
-	 * Creates recursively the houses on one side and a kalaha; kalaha will initialize the creation of the other side of a board.
+	 * Creates recursively the houses on one side and a kalaha; kalaha will initialize the creation of the opponent's houses.
 	 * @param owner The owner of the houses on one side.
 	 * @param beads The number of beads to be placed in each house.
 	 * @param neighbor The neighboring bowl of this house.
@@ -50,7 +50,7 @@ public class House extends Bowl {
 			new Kalaha(owner.getOpponent(), beads, this, housesPerSide);
 		}
 		
-		if(beads == 0) {
+		if(beads <= 0) {
 			owner.endGame();
 		}
 	}

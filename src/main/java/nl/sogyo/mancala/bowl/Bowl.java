@@ -114,7 +114,7 @@ public abstract class Bowl {
 		return countHousesFromPlayerStartingAt(this, owner);
 	}
 	protected int countHousesFromPlayerStartingAt(Bowl initialBowl, Player owner) {
-		int houseValue = (isHouse() && this.owner == owner ? 1 : 0);
+		int houseValue = (isHouse() && this.owner == owner ? 1 : 0); //if it is an owner's house we count it once, otherwise we don't count it
 		
 		if(neighbor == initialBowl || neighbor == null) {
 			return houseValue;
@@ -132,7 +132,7 @@ public abstract class Bowl {
 		return countKalahasFromPlayerStartingAt(this, owner);
 	}
 	protected int countKalahasFromPlayerStartingAt(Bowl initialBowl, Player owner) {
-		int kalahaValue = (isKalaha() && this.owner == owner ? 1 : 0);
+		int kalahaValue = (isKalaha() && this.owner == owner ? 1 : 0); //if it is an owner's kalaha we count it once, otherwise we don't count it
 		
 		if(neighbor == initialBowl || neighbor == null) {
 			return kalahaValue;
