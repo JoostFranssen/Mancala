@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,9 +88,8 @@ class HouseTest {
 	public void distributorOwnsStartingHouse() {
 		Player distributor = player.getOpponent();
 		
-		if(house.getOwner() != distributor) {
-			assertThrows(IllegalArgumentException.class, () -> house.play(distributor), "Opponent played the other's house, but no exception was thrown");
-		}
+		//house belongs to player, not to opponent
+		assertThrows(IllegalArgumentException.class, () -> house.play(distributor), "Opponent played the player's house, but no exception was thrown");
 	}
 	
 	@Test
@@ -114,11 +112,9 @@ class HouseTest {
 	@Test
 	public void distributorHasTurn() {
 		House opposite = (House)house.getOpposite();
-		if(!player.getOpponent().hasTurn()) {
-			assertThrows(IllegalStateException.class, () -> opposite.play(player.getOpponent()), "The player plays while not having a turn");
-		} else {
-			fail("Opponent should not have a turn");
-		}
+		
+		//at the start of the game the opponent does not have a turn
+		assertThrows(IllegalStateException.class, () -> opposite.play(player.getOpponent()), "The opponent plays while not having a turn");
 	}
 	
 	@Test
