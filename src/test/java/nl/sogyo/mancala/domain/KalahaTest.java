@@ -58,11 +58,11 @@ class KalahaTest {
 	
 	@Test
 	public void ownKalahaIsReachedButOpponentKalahaIsSkipped() {
-		setUpBoard(4, 2);
+		setUpBoard(House.DEFAULT_INITIAL_BEADS, 2);
 		house.play(player); //start from last house, places one bead in Kalaha, 1 in both opponent's houses, and the last bead in the first own house
 		
 		Kalaha playerKalaha = (Kalaha)house.getNeighbor();
-		Kalaha opponentKalaha = (Kalaha)playerKalaha.getNeighbor().getNeighbor().getNeighbor();
+		Kalaha opponentKalaha = (Kalaha)playerKalaha.getNeighbor(3);
 		
 		assertEquals(1, playerKalaha.getBeads(), "No bead was placed in own Kalaha");
 		assertEquals(0, opponentKalaha.getBeads(), "A bead was placed in opponent's Kalaha");

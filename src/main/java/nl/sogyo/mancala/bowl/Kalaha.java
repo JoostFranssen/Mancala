@@ -14,8 +14,8 @@ public class Kalaha extends Bowl {
 	 */
 	protected Kalaha(Player owner, int beads, Bowl neighbor, int housesPerSide) {
 		super(owner, 0, neighbor);
-		int numberOfKalahasFromOwner = countKalahasFromPlayer(owner.getOpponent());
-		if(numberOfKalahasFromOwner > 0) { //there are enough kalahas, so we can connect the last house to this kalaha
+		int numberOfKalahas = countKalahasFromPlayer(owner.getOpponent());
+		if(numberOfKalahas > 0) { //there are enough kalahas, so we can connect the last house to this kalaha
 			Bowl currentBowl = this;
 			while(currentBowl.neighbor != null) {
 				currentBowl = currentBowl.neighbor;
