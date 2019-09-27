@@ -1,4 +1,4 @@
-package nl.sogyo.mancala.player;
+package nl.sogyo.mancala.domain;
 
 public class Player {
 	private Player opponent;

@@ -11,13 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import nl.sogyo.mancala.bowl.Bowl;
-import nl.sogyo.mancala.bowl.House;
-import nl.sogyo.mancala.bowl.Kalaha;
-import nl.sogyo.mancala.player.Player;
+import nl.sogyo.mancala.domain.Player;
 
 class HouseTest {
-	;
 	public static final int DEFAULT_NUMBER_OF_BOWLS = 2 * House.DEFAULT_HOUSES_PER_SIDE + Kalaha.NUMBER_OF_KALAHAS;
 	
 	private Player player;
@@ -199,7 +195,8 @@ class HouseTest {
 	public void numberOfHousesByPlayer(int housesPerSide) {
 		setUpBoard(4, housesPerSide);
 		
-		assertEquals(housesPerSide, house.countHousesFromPlayer(player));
-		assertEquals(housesPerSide, house.countHousesFromPlayer(player.getOpponent()));
+		//+1 is because each player has one kalaha
+		assertEquals(housesPerSide + 1, house.countBowlsFromPlayer(player));
+		assertEquals(housesPerSide + 1, house.countBowlsFromPlayer(player.getOpponent()));
 	}
 }

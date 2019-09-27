@@ -1,6 +1,4 @@
-package nl.sogyo.mancala.bowl;
-
-import nl.sogyo.mancala.player.Player;
+package nl.sogyo.mancala.domain;
 
 public abstract class Bowl {
 	protected final Player owner;
@@ -33,11 +31,10 @@ public abstract class Bowl {
 	 * @return The neighborNumber-th neighbor of this bowl.
 	 */
 	public Bowl getNeighbor(int neighborNumber) {
-		Bowl currentBowl = this;
-		for(int i = 0; i < neighborNumber; i++) {
-			currentBowl = currentBowl.neighbor;
+		if(neighborNumber > 0) {
+			return neighbor.getNeighbor(neighborNumber - 1);
 		}
-		return currentBowl;
+		return this;
 	}
 	
 	/**
@@ -106,46 +103,19 @@ public abstract class Bowl {
 	public abstract Bowl getOpposite();
 	
 	/**
-	 * Counts the number of houses from and including the current bowl until it reaches itself again or null.
-	 * @param owner The player who owns the houses to be counted.
-	 * @return The number of houses owned by owner.
+	 * Counts the number of bowls from and including the current bowl until it reaches itself again or null
+	 * @return
 	 */
-	public int countHousesFromPlayer(Player owner) {
-		return countHousesFromPlayerStartingAt(this, owner);
+	public int countBowlsFromPlayer(Player owner) {
+		return countBowlsFromPlayerStartingAt(this, owner);
 	}
-	protected int countHousesFromPlayerStartingAt(Bowl initialBowl, Player owner) {
-		int houseValue = (isHouse() && this.owner == owner ? 1 : 0); //if it is an owner's house we count it once, otherwise we don't count it
+	private int countBowlsFromPlayerStartingAt(Bowl initialBowl, Player owner) {
+		int value = (this.owner == owner ? 1 : 0);
 		
 		if(neighbor == initialBowl || neighbor == null) {
-			return houseValue;
+			return value;
 		} else {
-			return neighbor.countHousesFromPlayerStartingAt(initialBowl, owner) + houseValue;
+			return neighbor.countBowlsFromPlayerStartingAt(initialBowl, owner) + value;
 		}
-	}
-	
-	/**
-	 * Counts the number of kalahas from and including the current Bowl until it reaches itself again or null.
-	 * @param owner The player who owns the kalahas to be counted.
-	 * @return The number of kalahas owned by owner.
-	 */
-	public int countKalahasFromPlayer(Player owner) {
-		return countKalahasFromPlayerStartingAt(this, owner);
-	}
-	protected int countKalahasFromPlayerStartingAt(Bowl initialBowl, Player owner) {
-		int kalahaValue = (isKalaha() && this.owner == owner ? 1 : 0); //if it is an owner's kalaha we count it once, otherwise we don't count it
-		
-		if(neighbor == initialBowl || neighbor == null) {
-			return kalahaValue;
-		} else {
-			return neighbor.countKalahasFromPlayerStartingAt(initialBowl, owner) + kalahaValue;
-		}
-	}
-	
-	public boolean isHouse() {
-		return false;
-	}
-	
-	public boolean isKalaha() {
-		return false;
 	}
 }

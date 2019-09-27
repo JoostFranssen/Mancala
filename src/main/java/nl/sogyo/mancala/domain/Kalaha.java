@@ -1,6 +1,4 @@
-package nl.sogyo.mancala.bowl;
-
-import nl.sogyo.mancala.player.Player;
+package nl.sogyo.mancala.domain;
 
 public class Kalaha extends Bowl {
 	public static final int NUMBER_OF_KALAHAS = 2;
@@ -14,15 +12,15 @@ public class Kalaha extends Bowl {
 	 */
 	protected Kalaha(Player owner, int beads, Bowl neighbor, int housesPerSide) {
 		super(owner, 0, neighbor);
-		int numberOfKalahas = countKalahasFromPlayer(owner.getOpponent());
-		if(numberOfKalahas > 0) { //there are enough kalahas, so we can connect the last house to this kalaha
+		int numberOfBowls = countBowlsFromPlayer(owner);
+		if(numberOfBowls == 1) { //if the only bowl created is the current one, then we need to create more houses
+			new House(owner, beads, this, housesPerSide);
+		} else { //this is the last kalaha, and so we need to connect the first house created to this kalaha
 			Bowl currentBowl = this;
 			while(currentBowl.neighbor != null) {
 				currentBowl = currentBowl.neighbor;
 			}
 			currentBowl.neighbor = this;
-		} else { //we still need another kalaha and therefore also another row of houses
-			new House(owner, beads, this, housesPerSide);
 		}
 	}
 	
@@ -74,10 +72,5 @@ public class Kalaha extends Bowl {
 	@Override
 	public Bowl getOpposite() {
 		return this;
-	}
-	
-	@Override
-	public boolean isKalaha() {
-		return true;
 	}
 }

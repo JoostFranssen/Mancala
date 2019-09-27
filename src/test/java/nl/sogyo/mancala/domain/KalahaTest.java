@@ -5,10 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import nl.sogyo.mancala.bowl.Bowl;
-import nl.sogyo.mancala.bowl.House;
-import nl.sogyo.mancala.bowl.Kalaha;
-import nl.sogyo.mancala.player.Player;
+import nl.sogyo.mancala.domain.Player;
 
 class KalahaTest {
 
@@ -47,13 +44,6 @@ class KalahaTest {
 		
 		assertEquals(1, playerKalahas, "The player does not have exactly one kalaha");
 		assertEquals(1, opponentKalahas, "The opponent does not have exactly one kalaha");
-	}
-	
-	@Test
-	public void countKalahas() {
-		//these methods were later implemented and thus are tested separately from the kalaha count
-		assertEquals(1, house.countKalahasFromPlayer(player), "Player does not have one kalaha");
-		assertEquals(1, house.countKalahasFromPlayer(player.getOpponent()), "Opponent does not have one kalaha");
 	}
 	
 	@Test

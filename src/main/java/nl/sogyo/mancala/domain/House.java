@@ -1,6 +1,4 @@
-package nl.sogyo.mancala.bowl;
-
-import nl.sogyo.mancala.player.Player;
+package nl.sogyo.mancala.domain;
 
 public class House extends Bowl {
 	
@@ -43,8 +41,8 @@ public class House extends Bowl {
 	 */
 	protected House(Player owner, int beads, Bowl neighbor, int housesPerSide) {
 		super(owner, beads, neighbor);
-		int numberOfHousesFromOwner = countHousesFromPlayer(owner);
-		if(numberOfHousesFromOwner < housesPerSide) {
+		int numberOfBowlsFromPlayer = countBowlsFromPlayer(owner);
+		if(numberOfBowlsFromPlayer < housesPerSide + (countBowlsFromPlayer(owner.getOpponent()) > 0 ? 1 : 0)) { //if the opponent's houses have been created, the player's kalaha is also already created, hence the +1 compensates for this
 			new House(owner, beads, this, housesPerSide);
 		} else {
 			new Kalaha(owner.getOpponent(), beads, this, housesPerSide);
@@ -121,10 +119,5 @@ public class House extends Bowl {
 	@Override
 	public Bowl getOpposite() {
 		return neighbor.getOpposite().getNeighbor();
-	}
-	
-	@Override
-	public boolean isHouse() {
-		return true;
 	}
 }

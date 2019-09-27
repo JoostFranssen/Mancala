@@ -1,4 +1,4 @@
-package nl.sogyo.mancala.frontEnd;
+package nl.sogyo.mancala.UI;
 
 public class Mancala {
 	public static void main(String[] args) {

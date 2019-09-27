@@ -1,10 +1,10 @@
-package nl.sogyo.mancala.frontEnd;
+package nl.sogyo.mancala.UI;
 
 import java.util.Scanner;
 
-import nl.sogyo.mancala.bowl.Bowl;
-import nl.sogyo.mancala.bowl.House;
-import nl.sogyo.mancala.player.Player;
+import nl.sogyo.mancala.domain.Bowl;
+import nl.sogyo.mancala.domain.House;
+import nl.sogyo.mancala.domain.Player;
 
 public class Game {
 	private Player player;
