@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import nl.sogyo.mancala.domain.Player;
 
-class HouseTest {
+public class HouseTest {
 	public static final int DEFAULT_NUMBER_OF_BOWLS = 2 * House.DEFAULT_HOUSES_PER_SIDE + Kalaha.NUMBER_OF_KALAHAS;
 	
 	private Player player;

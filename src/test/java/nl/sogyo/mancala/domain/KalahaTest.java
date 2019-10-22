@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import nl.sogyo.mancala.domain.Player;
 
-class KalahaTest {
+public class KalahaTest {
 
 	private Player player;
 	private House house;
